@@ -4,5 +4,10 @@ function welcomeBanner (){
 return "Employee Manager Banner Goes HERE"
 }
 
-module.exports = {userChoiceArray,welcomeBanner}
+function assignRequestType (response){
+    const resArray = response.split(" ");
+    
+}
+
+module.exports = {userChoiceArray,welcomeBanner,assignRequestType}
 
