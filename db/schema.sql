@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS challange_db;
+DROP DATABASE IF EXISTS challenge_db;
 -- Creating database
-CREATE DATABASE challange_db;
-USE challange_db;
+CREATE DATABASE challenge_db;
+USE challenge_db;
 
 -- Adding required tables --
 CREATE TABLE department (
