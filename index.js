@@ -12,10 +12,28 @@ function init (){
         choices: userChoiceArray,
       },
     ])
-    .then( async (response) => {
-    await  assignRequestType(response.action);
-      // init();
-      }
-)};
+    .then((response)=>{
+      assignRequestType(response.action);
+    })
+    // .then(()=> init());
+};
 
-module.exports = {init};
+function addToTable (){
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        message: 'Please type new department name:',
+        name: 'dept_name',
+      },
+    ])
+    .then((response)=>{
+      console.log(response);
+      // createQuery(response);
+    })
+    // .then(()=> init());
+};
+
+
+
+module.exports = {init,addToTable};
