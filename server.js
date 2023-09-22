@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
-const api = require('./routes/index');
+const api = require('./routes/api/index');
 const {init} = require('./index');
 const {welcomeBanner} = require('./helper/helpers')
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static('public'));
+
 
 //ROUTE FOR API/DATA
 app.use('/api',api);
