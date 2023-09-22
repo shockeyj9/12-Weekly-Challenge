@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const {userChoiceArray,welcomeBanner,assignRequestType} = require('./helper/helpers')
+const {userChoiceArray,assignRequestType} = require('./helper/helpers')
 
 
 function init (){
@@ -12,9 +12,9 @@ function init (){
         choices: userChoiceArray,
       },
     ])
-    .then( (response) => {
-      assignRequestType(response.action);
-      init();
+    .then( async (response) => {
+    await  assignRequestType(response.action);
+      // init();
       }
 )};
 
