@@ -1,38 +1,52 @@
 class Query {
-    constructor(table, column){
+    constructor(table, column = null, column2 = null){
         this.table = table;
         this.column = column;
+        this.column2 = column2;
         this.host = 'http://localhost:3001';
     }
-    selectQuery(){
-        const url = `${this.host}/api/query/${this.table}`
-        fetch(url, {
+
+    async selectQuery(){
+        console.log(this.column2);
+        console.log('selectQuery Called');
+        let url;
+        if (this.column == null){
+             url = `${this.host}/api/query/${this.table}`
+        }else if (this.column2==null){
+             url = `${this.host}/api/query/${this.column}/${this.table}`
+        }else {
+            url = `${this.host}/api/query/${this.column}/${this.column2}/${this.table}`
+        }
+        const response = await fetch(url, {
             method: "GET"
           })
-          .then((response)=> response.json())
-          .then ((data)=>console.table(data.data))
-
-        }
+        const dataObj = await response.json()
+        return dataObj.data
+    }
+    
 
         //create a new entry in table
-        createQuery(newEntry){
+    async createQuery(newEntry){
+        try {
             const url = `${this.host}/api/query/${this.table}`
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newEntry),
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  console.log('Successful POST request:', data);
-                  return data;
-                })
-                .catch((error) => {
-                  console.error('Error in POST request:', error);
-                })
-            }
+            const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(newEntry),
+                            })
+                            
+            const dataObj = await response.json();
+            console.log('Successful POST request:', dataObj);
+            console.log(dataObj.data);
+            return dataObj.data;
+        } catch (error) {
+            
+            console.error('Error in POST request:', error);
+        }
+    }
 };
 
 module.exports = Query;
