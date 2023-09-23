@@ -49,10 +49,12 @@ router.get('/:columnName/:tableName', (req, res) => {
       });
 });
 
-//Add department ---NOT READY FOR TESTING 
-router.post('/department', (req, res) => {
-
-    const sql = `INSERT INTO department (name) VALUES ("Accounting")`;
+//get manager first & last name
+router.get('/:firstName/:lastName/:tableName', (req, res) => {
+  const queryTable = req.params.tableName;
+  const queryFName =  req.params.firstName;
+  const queryLName =  req.params.lastName;
+    const sql = `SELECT CONCAT(${queryFName},' ',${queryLName}) as name FROM ${queryTable}`;
     db.query(sql, (err, rows) => {
         if (err) {
           res.status(500).json({ error: err.message });
@@ -63,6 +65,63 @@ router.post('/department', (req, res) => {
           data: rows
         });
       });
+});
+
+//Add department 
+router.post('/department', (req, res) => {
+    const sql = `INSERT INTO department (name) VALUES ("${req.body.dept_name}")`;
+    db.query(sql, (err, rows) => {
+        if (err) {
+          res.status(500).json({ error: err.message });
+           return;
+        }
+        res.json({
+          message: 'success',
+          data: rows
+        });
+      });
+});
+
+//Add role 
+router.post('/role', (req, res) => {
+  const title = req.body.role_title;
+  const salary = req.body.role_salary;
+  const dept_name = req.body.role_dept_id;
+  const sql = `INSERT INTO role (title,salary,department_id) SELECT "${title}", ${salary}, d.id FROM department d WHERE d.name like "${dept_name}" `;
+  db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
+
+
+//Add employee 
+router.post('/employee', (req, res) => {
+
+  console.log(req.body);
+  const firstName = req.body.first_name;
+  const lastName = req.body.last_name;
+  const role = req.body.emp_role;
+  const manager = req.body.emp_manager;
+
+  const sql = `INSERT INTO employee (first_name,last_name,role_id, manager_id) SELECT "${firstName}", "${lastName}",(SELECT id FROM role WHERE title like "${role}" ), (SELECT id FROM employee WHERE CONCAT(first_name," ",last_name) like "${manager}" ) from DUAL`;
+
+  db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
 });
 
 module.exports = router; 

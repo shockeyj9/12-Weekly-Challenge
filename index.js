@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
-const {userChoiceArray,assignRequestType} = require('./helper/helpers')
+const {userChoiceArray} = require('./helper/helpers');
+const {assignRequestType} = require('./helper/userinputs')
 
 
 function init (){
@@ -15,25 +16,10 @@ function init (){
     .then((response)=>{
       assignRequestType(response.action);
     })
-    // .then(()=> init());
-};
-
-function addToTable (){
-  inquirer
-    .prompt([
-      {
-        type: 'input',
-        message: 'Please type new department name:',
-        name: 'dept_name',
-      },
-    ])
-    .then((response)=>{
-      console.log(response);
-      // createQuery(response);
-    })
-    // .then(()=> init());
 };
 
 
 
-module.exports = {init,addToTable};
+
+
+module.exports = {init};
