@@ -124,4 +124,24 @@ router.post('/employee', (req, res) => {
     });
 });
 
+//update employee role 
+router.put('/employee', (req, res) => {
+
+  const role = req.body.new_role;
+  const emp_name = req.body.employee;
+
+  const sql = `UPDATE employee SET role_id = (SELECT id FROM role WHERE title LIKE "${role}") WHERE CONCAT(first_name,' ',last_name) like "${emp_name}"`;
+
+  db.query(sql, (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+         return;
+      }
+      res.json({
+        message: 'success',
+        data: rows
+      });
+    });
+});
+
 module.exports = router; 

@@ -8,7 +8,6 @@ return "Employee Manager Banner Goes HERE"
 }
 
 async function getData(table, column, column2){
-    console.log("getData called")
     let newQuery 
     if (!column2){
     newQuery = new Query (table, column);

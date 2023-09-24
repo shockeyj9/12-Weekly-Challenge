@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const api = require('./routes/api/index');
-const {init} = require('./index');
+const {init} = require('./helper/userinputs');
 const {welcomeBanner} = require('./helper/helpers')
 
 // Express middleware
