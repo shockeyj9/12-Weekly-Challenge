@@ -1,8 +1,6 @@
 const inquirer = require('inquirer');
 const Query = require('../constructor/select');
-const {getData} = require('./helpers');
-
-
+const {getData,userChoiceArray} = require('./helpers');
 
 function addToTable (resTable){
     let result;
@@ -22,17 +20,35 @@ function addToTable (resTable){
     if(resType=='view'){
         resTable = resTable[resTable.length-1].slice(0,-1)
         const result = await getData(resTable);
-        return console.table(result)
+        console.table(result);
+        init();
+        return result;
     }else if (resType=='add'){
         //inquirer function to get additional information
         resTable = resTable[resTable.length-1]
         addToTable(resTable);
     }else if (resType=='update'){
         //inquirer function to get additional information
+        updateEmployee();
     }
-
 }
 
+function init (){
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          message: 'What would you like to do?',
+          name: 'action',
+          choices: userChoiceArray,
+        },
+      ])
+      .then((response)=>{
+      assignRequestType(response.action);
+        // return result;
+      })
+    //   .then(()=> init())
+  };
 
   function addDept (resTable){
     inquirer
@@ -45,8 +61,9 @@ function addToTable (resTable){
     ])
     .then((response)=>{
     const newQuery = new Query (resTable);
-    newQuery.createQuery(response);
+    return newQuery.createQuery(response);
     })
+    .then(()=> init())
   }
 
 async  function addRole (resTable){
@@ -73,8 +90,9 @@ async  function addRole (resTable){
     ])
     .then((response)=>{
         const newQuery = new Query (resTable);
-        newQuery.createQuery(response);
-        })
+       return newQuery.createQuery(response);
+    })
+    .then(()=> init())
   }
 
   async  function addEmployee (resTable){
@@ -111,10 +129,38 @@ async  function addRole (resTable){
     ])
     .then((response)=>{
         const newQuery = new Query (resTable);
-        newQuery.createQuery(response);
-        })
+        return newQuery.createQuery(response);
+    })
+    .then(()=> init())
   }
 
+async  function updateEmployee (){
+    const roleObj = await getData('role', 'title');
+    const roleArray = roleObj.map((role)=>role.title);
+    const empObj = await getData('employee', 'first_name', 'last_name');
+    const empArray = empObj.map((man)=> man.name);
 
+    inquirer
+    .prompt([
+      {
+        type: 'list',
+        message: `Please select the employee you would like to update:`,
+        name: 'employee',
+        choices: empArray,
+      },
+      {
+        type: 'list',
+        message: `Please select the employee's new role:`,
+        name: 'new_role',
+        choices: roleArray,
+      },
+      
+    ])
+    .then((response)=>{
+        const newQuery = new Query ('employee','role');
+        return newQuery.updateQuery(response);
+    })
+    .then(()=>init())
+  }
 
-  module.exports = {addToTable,assignRequestType}
+  module.exports = {init}
