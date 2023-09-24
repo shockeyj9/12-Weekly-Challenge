@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const Query = require('../constructor/select');
+const Table = require('nodejs-console-table');
 const {getData,userChoiceArray} = require('./helpers');
 
 function addToTable (resTable){
@@ -20,7 +21,8 @@ function addToTable (resTable){
     if(resType=='view'){
         resTable = resTable[resTable.length-1].slice(0,-1)
         const result = await getData(resTable);
-        console.table(result);
+        const table = new Table(result).table
+        console.table(table);
         init();
         return result;
     }else if (resType=='add'){

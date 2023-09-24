@@ -37,7 +37,7 @@ async createQuery(newEntry){
                             })
                             
             const dataObj = await response.json();
-            console.log('Successful POST request:', dataObj);
+            console.log('Successful POST request');
             return dataObj.data;
         } catch (error) {
             
@@ -59,11 +59,11 @@ async createQuery(newEntry){
                             })
                             
             const dataObj = await response.json();
-            console.log('Successful Update request:', dataObj);
+            console.log('Successful PUT request');
             return dataObj.data;
         } catch (error) {
             
-            console.error('Error in POST request:', error);
+            console.error('Error in PUT request:', error);
         }
     }
 
