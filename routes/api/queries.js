@@ -18,9 +18,16 @@ const db = mysql.createConnection(
 //GET ROUTE -- URL: '/api/query'
 //get all rows from specific table
 router.get('/:tableName', (req, res) => {
+  let sql; 
   const queryTable = req.params.tableName;
-    const sql = `SELECT * FROM ??`;
-    db.query(sql, queryTable, (err, rows) => {
+  if (queryTable=='department'){
+    sql = `SELECT * FROM ${queryTable}`;
+  }else if (queryTable=='role'){
+    sql = `SELECT r.id, r.title, d.name as Dept_Name, r.salary FROM role r JOIN department d ON d.id = r.department_id`
+  }else if (queryTable=='employee'){
+    sql = `SELECT e.id, e.first_name,e.last_name,r.title, d.name as dept_name, CONCAT(e2.first_name," ",e2.last_name) as manager, r.salary from employee e JOIN role r on r.id=e.role_id join department d on r.department_id=d.id left join employee e2 on e.manager_id=e2.id;`
+  }
+    db.query(sql, (err, rows) => {
         if (err) {
           res.status(500).json({ error: err.message });
            return;
