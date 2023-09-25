@@ -4,7 +4,21 @@ const userChoiceArray = ["view all departments", "view all roles", "view all emp
 
 
 function welcomeBanner (){
-return "Employee Manager Banner Goes HERE"
+    const banner = 
+    " _____                _                        \n
+     |  ___|              | |                       \n
+     | |__ _ __ ___  _ __ | | ___  _   _  ___  ___  \n
+     |  __| '_ ` _ \| '_ \| |/ _ \| | | |/ _ \/ _ \ \n
+     | |__| | | | | | |_) | | (_) | |_| |  __/  __/ \n
+     \____/_| |_| |_| .__/|_|\___/ \__, |\___|\___| \n
+     |  \/  |       |_|            |___/            \n
+     | .  . | __ _ _ __   __ _  __ _  ___ _ __      \n
+     | |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|     \n
+     | |  | | (_| | | | | (_| | (_| |  __/ |        \n
+     \_|  |_/\__,_|_| |_|\__,_|\__, |\___|_|        \n
+                                __/ |               \n
+                                |___/                  "
+return console.log(banner);
 }
 
 async function getData(table, column, column2){
