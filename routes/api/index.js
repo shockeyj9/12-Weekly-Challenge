@@ -1,4 +1,3 @@
-const router = require('express').Router();
 const express = require('express');
 const app = express();
 
@@ -9,11 +8,11 @@ const basicRoutes = require('./basic.js');
 // const updateRoutes = require('./update.js');
 // const deleteRoutes = require('./delete.js');
 
-router.use('/basic', basicRoutes);
+app.use('/basic', basicRoutes);
 // app.use('/init', initRoutes);
 // app.use('/view', viewRoutes);
 // app.use('/add', addRoutes);
 // app.use('/update', updateRoutes);
 // app.use('/delete', deleteRoutes);
 
-module.exports = router;
+module.exports = app;
