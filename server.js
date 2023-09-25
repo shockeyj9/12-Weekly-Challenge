@@ -18,9 +18,10 @@ app.use((req, res) => {
     res.status(404).end();
   });
   
-  app.listen(PORT,  () => {
+  app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(welcomeBanner());
+    const banner = await welcomeBanner();
+    console.info(banner);
     init();
   });
 
