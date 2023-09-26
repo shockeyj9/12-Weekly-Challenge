@@ -1,6 +1,6 @@
 const Query = require('../constructor/select');
 
-const userChoiceArray = ["view all departments", "view all roles", "view all employees", "add a department", "add a role", "add an employee", "update an employee role"];
+const userChoiceArray = ["view all departments", "view all roles", "view all employees", "view employees by manager","view employees by department","view utilized budget by department","add a department", "add a role", "add an employee", "update an employee role","update employee manager", "delete department","delete role","delete employee"];
 
 
 function welcomeBanner (){
@@ -27,13 +27,8 @@ return banner;
 }
 
 async function getData(table, column, column2){
-    let newQuery 
-    if (!column2){
-    newQuery = new Query (table, column);
-    } else {
-     newQuery = new Query (table, column, column2); 
-    }
-    const result = await newQuery.selectQuery();
+    const newQuery = new Query (table,column, column2);
+    const result = await newQuery.basicQuery();
     return result;
 };
 
