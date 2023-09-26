@@ -15,23 +15,31 @@ function addToTable (resTable){
   };
 
   async function assignRequestType(response){
-    const resType = response.split(' ')[0]
-    const resColumn = response.split(' ')[1]
     let resTable = response.split(' ')
-    if(resType=='view'){
-        resTable = resTable[resTable.length-1].slice(0,-1)
-        const result = await getData(resTable);
-        const table = new Table(result).table
-        console.table(table);
-        init();
-        return result;
-    }else if (resType=='add'){
-        //inquirer function to get additional information
+
+    if(resTable.includes('view')){
+      if(resTable.includes('all')){
+        resTable = resTable[resTable.length-1]
+          const newQuery = new Query (resTable);
+          const result = await newQuery.initQuery();
+          const table = new Table(result).table
+          console.table(table);
+          init();
+      }else if (resTable.includes('budget')){
+        budByDept();
+      }else{
+        byColumn = resTable[resTable.length-1]
+        empBy(byColumn)
+      }
+    }else if (resTable.includes('add')){
         resTable = resTable[resTable.length-1]
         addToTable(resTable);
-    }else if (resType=='update'){
-        //inquirer function to get additional information
-        updateEmployee();
+    }else if (resTable.includes('update')){
+      updateCol = resTable[resTable.length-1]
+        updateEmployee(updateCol); 
+    }else{
+      delTable = resTable[resTable.length-1]
+       deleteTable(delTable);
     }
 }
 
@@ -47,10 +55,59 @@ function init (){
       ])
       .then((response)=>{
       assignRequestType(response.action);
-        // return result;
       })
-    //   .then(()=> init())
   };
+
+async function empBy (resColumn){
+  const managerObj = await getData(resColumn)
+  const managerArr = managerObj.map((man)=>man.name)
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          message: `Please select the ${resColumn}:`,
+          name: resColumn,
+          choices: managerArr,
+        },
+      ])
+      .then(async (response)=>{
+        if (resColumn=='manager'){
+          const newQuery = new Query ('empbymanager');
+          const result = await newQuery.viewQuery(response.manager); 
+          const table = new Table(result).table;
+          return console.log(table);
+        }else{
+          const newQuery = new Query ('empbydept');
+          const result = await newQuery.viewQuery(response.department); 
+          const table = new Table(result).table;
+          return console.log(table);
+        }
+      })
+    .then(()=> init())
+  };
+
+async function budByDept (){
+    const deptObj = await getData('department')
+    const deptArr = deptObj.map((man)=>man.name)
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          message: 'Please select the department:',
+          name: 'dept',
+          choices: deptArr,
+        },
+      ])
+      .then(async (response)=>{
+        const newQuery = new Query ('budget');
+        const result = await newQuery.viewQuery(response.dept); 
+        const table = new Table(result).table;
+        return console.log(table);
+      })
+      .then(()=> init())
+  };
+
+
 
   function addDept (resTable){
     inquirer
@@ -136,10 +193,16 @@ async  function addRole (resTable){
     .then(()=> init())
   }
 
-async  function updateEmployee (){
-    const roleObj = await getData('role', 'title');
-    const roleArray = roleObj.map((role)=>role.title);
-    const empObj = await getData('employee', 'first_name', 'last_name');
+async  function updateEmployee (updateCol){
+  let roleArray;
+    if (updateCol=='role'){
+      const roleObj = await getData('role');
+       roleArray = roleObj.map((col)=>col.title);
+    }else{
+      const roleObj = await getData('employee');
+       roleArray = roleObj.map((col)=>col.name);
+    }
+    const empObj = await getData('employee');
     const empArray = empObj.map((man)=> man.name);
 
     inquirer
@@ -152,17 +215,44 @@ async  function updateEmployee (){
       },
       {
         type: 'list',
-        message: `Please select the employee's new role:`,
-        name: 'new_role',
+        message: `Please select the employee's new ${updateCol}:`,
+        name: `new_${updateCol}`,
         choices: roleArray,
       },
       
     ])
     .then((response)=>{
-        const newQuery = new Query ('employee','role');
+      //BROKEN CAN'T GET UPDATE TO WORK
+        const newQuery = new Query (updateCol);
         return newQuery.updateQuery(response);
     })
-    .then(()=>init())
+
   }
+
+  async  function deleteTable (delTable){
+    const tableObj = await getData(delTable);
+    let tableArray
+    if (delTable=='role'){
+      tableArray= tableObj.map((role)=>role.title);
+    }else{
+      tableArray= tableObj.map((role)=>role.name);
+    }
+      inquirer
+      .prompt([
+        {
+          type: 'list',
+          message: `Please select the ${delTable} you would like to delete:`,
+          name: "type",
+          choices: tableArray,
+        },
+        
+      ])
+      .then((response)=>{
+          const newQuery = new Query (delTable);
+          return newQuery.deleteQuery(response.type);
+      })
+      .then(()=>init())
+  
+    }
 
   module.exports = {init}
