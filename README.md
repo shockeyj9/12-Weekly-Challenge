@@ -6,7 +6,7 @@ This application allows users to navigate an employee database.
 
 The code for this application is available at: https://github.com/shockeyj9/Note-Taker
 
-Walkthrough video for application: 
+Walkthrough video for application: https://drive.google.com/file/d/1ZPwg2Au0OcJ-oFilqYueVSomWNLL9rvh/view?usp=drive_link 
 
 ## Table of Contents
 
@@ -22,6 +22,9 @@ Inquirer version 8.2.4, dotenv, express,mysql2, and nodejs-console-table.
 
 ## Usage
 
+This application is used to query a database which stores employee records, department records, and role records for a mock company. 
+
+The user interacts with the Command Line.
 
 
 ## License
