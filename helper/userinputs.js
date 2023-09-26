@@ -56,7 +56,6 @@ function init (){
       .then((response)=>{
       assignRequestType(response.action);
       })
-    //   .then(()=> init())
   };
 
 async function empBy (resColumn){
@@ -249,7 +248,6 @@ async  function updateEmployee (updateCol){
         
       ])
       .then((response)=>{
-        //BROKEN CAN'T GET UPDATE TO WORK
           const newQuery = new Query (delTable);
           return newQuery.deleteQuery(response.type);
       })
