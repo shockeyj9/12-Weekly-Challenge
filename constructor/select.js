@@ -6,15 +6,35 @@ class Query {
         this.host = 'http://localhost:3001';
     }
 
-    async selectQuery(){
-        let url;
-        if (this.column == null){
-             url = `${this.host}/api/query/${this.table}`
-        }else if (this.column2==null){
-             url = `${this.host}/api/query/${this.column}/${this.table}`
-        }else {
-            url = `${this.host}/api/query/${this.column}/${this.column2}/${this.table}`
-        }
+    async basicQuery(){
+        const url = `${this.host}/api/basic/${this.table}`
+        const response = await fetch(url, {
+            method: "GET"
+          })
+        const dataObj = await response.json()
+        return dataObj.data
+    }
+    async deleteQuery(delTable){
+        const url = `${this.host}/api/delete/${this.table}/${delTable}`
+        const response = await fetch(url, {
+            method: "DELETE"
+          })
+        const dataObj = await response.json()
+        console.log('Successful DELETE request');
+        return dataObj.data
+    }
+
+    async initQuery(){
+        const url = `${this.host}/api/init/${this.table}`
+        const response = await fetch(url, {
+            method: "GET"
+          })
+        const dataObj = await response.json()
+        return dataObj.data
+    }
+
+    async viewQuery(param){
+        const url = `${this.host}/api/view/${this.table}/${param}`
         const response = await fetch(url, {
             method: "GET"
           })
@@ -23,10 +43,11 @@ class Query {
     }
     
 
+
         //create a new entry in table
 async createQuery(newEntry){
         try {
-            const url = `${this.host}/api/query/${this.table}`
+            const url = `${this.host}/api/add/${this.table}`
             const response = await fetch(url, {
                             method: 'POST',
                             headers: {
@@ -48,7 +69,13 @@ async createQuery(newEntry){
     async updateQuery(newEntry){
         console.log('updateQuery called');
         try {
-            const url = `${this.host}/api/query/employee`
+            let url;
+            if (this.table=='role'){
+                url = `${this.host}/api/update/emprole`
+            }else{
+                url = `${this.host}/api/update/empmanager`
+            }
+
             const response = await fetch(url, {
                             method: 'PUT',
                             headers: {
